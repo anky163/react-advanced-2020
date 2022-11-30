@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 // react router
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 // global
-import { AppContext } from '../AppContext'
+// import { AppContext } from '../AppContext'
 import { GetDrinksByNames } from '../getDrinksByNames'
 
 // pages
@@ -17,25 +17,19 @@ import Error from '../pages/Error'
 import '../../../global.css'
 import './index.css'
 
+
 const Index = () => {
-  const { drinks, isLoading, searchTerm, setSearchTerm } = GetDrinksByNames()
-
-  useEffect(() => {
-    document.title = "cầy tơ 7 món"
-  }, [])
-
   return (
       <Router>
         <Navbar />
-        
-        <AppContext.Provider value={ { drinks, isLoading, searchTerm, setSearchTerm } }>
-          <Routes >   
-            <Route exact path="/" element={ <Home />} />
-            <Route path="/cocktail/:id" element={ <Detail /> } />
-            <Route path="/about" element={ <About /> } />
-            <Route path='*' element={ <Error /> } />  
-          </Routes>
-        </AppContext.Provider>
+
+        <Routes >   
+          <Route path="/" element={ <Home { ...GetDrinksByNames() } /> } />
+          <Route path="/cocktail/:id" element={ <Detail /> } />
+          <Route path="/about" element={ <About /> } />
+          <Route path='*' element={ <Error /> } />  
+        </Routes>
+ 
       </Router>
   )
 }

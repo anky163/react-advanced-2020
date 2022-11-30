@@ -1,57 +1,56 @@
-import { useState, useEffect, useReducer, useCallback } from "react"
-
-const defaultUrl = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s='
+import { useEffect, useReducer } from "react"
 
 const defaultState = {
   drinks: null,
+  loading: true,
   defaultUrl: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
-  isLoading: true,
+  searchTerm: '',
 }
 
 const reducer = (state, action) => {
   if (action.type === 'LOADING_ON') {
-    return { ...state, isLoading: true }
-  }
-
-  if (action.type === 'LOADING_OFF') {
-    return { ...state, isLoading: false }
-  }
-
-  if (action.type === 'FETCH') {
-    const { searchTerm, getData } = action.payload
-    const newUrl = state.defaultUrl + searchTerm
-    const newDrinks = getData(newUrl)
+    console.log('Menu loading...');
     return {
       ...state,
-      drinks: newDrinks,
-      isLoading: false,
+      drinks: null, 
+      loading: true
     }
   }
+
+  if (action.type === 'SEARCH') {
+    const searchTerm = action.payload
+    return {
+      ...state,
+      drinks: null,
+      searchTerm: searchTerm,
+    }
+  }
+
+  if (action.type === 'GET_DRINKS') {
+    console.log('Menu loaded.');
+    const newDrinks = action.payload
+    return {
+      ...state, 
+      drinks: newDrinks,
+      loading: false
+    }
+  }
+
   throw new Error('Unmatching action type')
 }
 
 
 export const GetDrinksByNames = () => {
-  const [drinks, setDrinks] = useState(null)
-  const [url, setUrl] = useState(defaultUrl)
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [state, dispatch] = useReducer(reducer, defaultState)
 
-  const getData = useCallback(async() => {
-    setIsLoading(true);
+  const getData = async(url) => {
+    dispatch({ type: 'LOADING_ON' })
     try {
       const response = await fetch(url)
       const data = await response.json()
-      const newDrinks = data.drinks
-      if (newDrinks) {
-        setDrinks(newDrinks.map(item => {
-          const { 
-            idDrink, 
-            strDrink, 
-            strDrinkThumb, 
-            strAlcoholic, 
-            strGlass, 
-          } = item;
+      if (data.drinks) {
+        const newDrinks = data.drinks.map(item => {
+          const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } = item
           return {
             id: idDrink,
             name: strDrink,
@@ -59,27 +58,20 @@ export const GetDrinksByNames = () => {
             info: strAlcoholic,
             glass: strGlass,
           }
-        }));
+        })
+        dispatch({ type: 'GET_DRINKS', payload: newDrinks })
       } else {
-        // console.log(`${ response.status } ${ response.statusText }`)
-        setDrinks(null);
+        dispatch({ type: 'GET_DRINKS', payload: null })
       }
-      
     } catch (err) {
       console.log(err)
     }
-    setIsLoading(false)
-    // console.count('fetch done')
-  }, [url]);
+  }
 
   useEffect(() => {
-    getData();
-  }, [url, getData])
+    const currentUrl = state.defaultUrl + state.searchTerm 
+    getData(currentUrl)
+  }, [state.defaultUrl, state.searchTerm])
 
-  useEffect(() => {
-    const newUrl = defaultUrl + searchTerm;
-    setUrl(newUrl)
-  }, [searchTerm])
-
-  return { drinks, isLoading, searchTerm, setSearchTerm }
+  return { ...state, dispatch }
 }

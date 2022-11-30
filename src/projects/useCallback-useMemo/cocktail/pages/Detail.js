@@ -5,12 +5,15 @@ import { GetSingleCocktailById } from '../GetSingleCocktailById';
 import Loader from './components/Loader'
 
 
-const Detail = () => {
+const Detail = React.memo(() => {
+  console.count('Detail rendering');
+
   const { id } = useParams()
   const { cocktail, loading } = GetSingleCocktailById(id)
 
-  console.count('Detail rendered');
-  console.log(cocktail)
+  if (!loading) {
+    console.log(cocktail)
+  }
 
   const {
     name,
@@ -53,7 +56,7 @@ const Detail = () => {
     </>
   );
 
-};
+});
 
 
 export default Detail

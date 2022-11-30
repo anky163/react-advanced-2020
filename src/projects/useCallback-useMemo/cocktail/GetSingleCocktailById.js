@@ -1,55 +1,80 @@
-import { useState, useEffect, useCallback } from "react"
+import { useEffect, useReducer, useCallback } from "react"
 
-const defaultUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i='
+const defaultState = {
+  cocktail: {},
+  loading: true,
+  defaultUrl: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+}
+
+const reducer = (state, action) => {
+  if (action.type === 'LOADING_ON') {
+    console.log('Cocktail searching...');
+    return {
+      ...state,
+      cocktail: {}, 
+      loading: true
+    }
+  }
+
+  if (action.type === 'GET_COCKTAIL') {
+    const newCocktail = action.payload
+    console.log(`${ newCocktail.name } found.`)
+    return {
+      ...state, 
+      cocktail: newCocktail,
+      loading: false
+    }
+  }
+
+  throw new Error('Unmatching action type')
+}
+
 
 export const GetSingleCocktailById = (id) => {
-  const [loading, setLoading] = useState(false)
-  const [cocktail, setCocktail] = useState({})
+  const [state, dispatch] = useReducer(reducer, defaultState)
 
   const getIngredients = (item) => {
     const ingredients = [...Array(16).keys()].reduce((result, i) => {
-      const element = 'strIngredient' + i;
+      const element = 'strIngredient' + i
       if (item[element]) {
         result.push(item[element])
       }
-      return result;
+      return result
     }, []);
-    return ingredients;
+    return ingredients
   }
 
   const getData = useCallback(async() => {
-    setLoading(true);
+    dispatch({ type: 'LOADING_ON' })
     try {
-      const response = await fetch(defaultUrl + id)
+      const response = await fetch(state.defaultUrl + id)
       const data = await response.json()
       const item = data.drinks[0]
       if (item) {
-        const {
-          strDrink: name,
-          strDrinkThumb: image,
-          strAlcoholic: info,
-          strCategory: category,
-          strGlass: glass,
-          strInstructions: instructions,
-        } = item
-
+        const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass, strInstructions } = item
         const ingredients = getIngredients(item)
-
-        const newCocktail = { name, image, info, category, glass, instructions, ingredients }
-
-        setCocktail(newCocktail)
-      } else {      
-        setCocktail({})
+        const newCocktail = {
+          id: idDrink,
+          name: strDrink,
+          image: strDrinkThumb,
+          info: strAlcoholic,
+          glass: strGlass,
+          instructions: strInstructions,
+          ingredients: ingredients
+        }
+        dispatch({ type: 'GET_COCKTAIL', payload: newCocktail })
+      } else {
+        dispatch({ type: 'GET_COCKTAIL', payload: {} })
       }
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
     }
-    setLoading(false)
-  }, [id])
+  }, [id, state.defaultUrl])
 
   useEffect(() => {
     getData()
   }, [id, getData])
-
-  return { cocktail, loading }
+  
+  const { loading, cocktail } = state
+  return { loading, cocktail }
 }

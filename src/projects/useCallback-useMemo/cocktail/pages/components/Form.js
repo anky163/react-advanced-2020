@@ -1,12 +1,10 @@
-import React, { useContext } from "react"
-import { AppContext } from "../../AppContext";
+import React from "react"
 
-const Form = () => {
-  const { searchTerm, setSearchTerm } = useContext(AppContext)
 
+const Form = ({ searchTerm, dispatch }) => {
   const filterOut = (e) => {
     e.preventDefault();
-    setSearchTerm(e.target.value);
+    dispatch({ type: 'SEARCH', payload: e.target.value })
   }
 
   return (
@@ -14,7 +12,7 @@ const Form = () => {
       <form className="search-form" onSubmit={ (e) => e.preventDefault() }>
         <div className="form-control">
           <label htmlFor="name">search your favorite cocktail</label>
-          <input type="text" name="name" id="name" value={ searchTerm } 
+          <input type="text" name="name" id="name" value={ searchTerm }
             onChange={ filterOut } />
         </div>
       </form>

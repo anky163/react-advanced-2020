@@ -1,31 +1,34 @@
-import React, { useContext } from 'react'
+import React from 'react'
+
+// import { useContext } from 'react'
 
 // global
-import { AppContext } from '../AppContext'
+// import { AppContext } from '../AppContext'
 
 // components
 import Form from './components/Form'
 import Loader from './components/Loader'
 import CocktailsList from './components/CocktailsList' 
 
-const Home = () => {
-  const { drinks, isLoading, searchTerm, setSearchTerm } = useContext(AppContext)
-  console.count('Home rendered')
+
+const Home = React.memo(({ drinks, loading, searchTerm, dispatch }) => {
+  console.count('Home rendering')
+
+  if (drinks) {
+    console.log(drinks);
+  }
+
   return (
     <main>
-      <AppContext.Provider value={ { searchTerm, setSearchTerm } }>
-        <Form />
-      </AppContext.Provider>
+      <Form searchTerm={ searchTerm } dispatch={ dispatch } />
       
       { 
-        isLoading 
+        loading
         ? <Loader /> 
-        : <AppContext.Provider value={ { drinks, isLoading } }>
-          <CocktailsList />
-        </AppContext.Provider>
+        : <CocktailsList drinks={ drinks } />
       }
     </main>
   )
-}
+})
 
 export default Home
