@@ -152,9 +152,9 @@ p {
 /* section */
 .section,
 .container {
-  /* width: 90vw; */
+  width: 90vw;
   margin: 0 auto;
-  /* max-width: var(--max-width); */
+  max-width: var(--max-width);
 }
 
 @media screen and (min-width: 992px) {
@@ -168,9 +168,8 @@ p {
   margin-top: 5rem;
 }
 
-/* .btn {
+.btn {
   display: inline-block;
-  display: flex;
   background: var(--clr-primary-5);
   color: var(--clr-white);
   padding: 0.25rem 0.75rem;
@@ -185,7 +184,7 @@ p {
   cursor: pointer;
   transition: var(--transition);
 }
-*/
+
 .btn:hover {
   background: var(--clr-primary-1);
   color: var(--clr-primary-5);

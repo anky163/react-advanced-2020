@@ -1,36 +1,17 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React from 'react'
 
 import { Navbar, Header, Footer, Item } from './HtmlElements'
 
-import { getData } from './getData'
-import { reducer } from './reducer';
+import { useFetch } from './useFetch'
+
 
 import './index.css'
 
 const url = 'https://course-api.com/react-useReducer-cart-project';
 
-const defaultData = {
-  items: [],
-  totalAmount: 0,
-  totalPrice: 0,
-};
-
 const Cart = () => {
-  // console.log('rendering');
-
-  const [bag, dispatch] = useReducer(reducer, defaultData);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    document.title = `Yotsuba's bag (${ bag.totalAmount })`;
-  }, [bag.totalAmount]);
-
-  useEffect(() => {
-    getData({ url, dispatch, setIsLoading, setIsError, setError });
-  }, []);
+  const { bag, dispatch, isLoading, isError, error } = useFetch(url);
+  const { totalAmount, totalPrice } = bag;
   
   if (isLoading) {
     return <h1 className='loading'>loading...</h1>
@@ -42,16 +23,16 @@ const Cart = () => {
 
   return (
     <main>
-      <Navbar totalAmount={ bag.totalAmount } />
+      <Navbar { ...{ totalAmount } } />
       
       <section className="cart">
-        <Header totalAmount={ bag.totalAmount } />
+        <Header { ...{ totalAmount } } />
                 
         <div>
-          { bag.items.map(item => <Item key={ item.id } item={ item } dispatch={ dispatch } />) }
+          { bag.items.map(item => <Item key={ item.id } { ...{ item, dispatch } } />) }
         </div>
         
-        <Footer totalAmount={ bag.totalAmount } totalPrice={ bag.totalPrice } dispatch={ dispatch } />
+        <Footer { ...{ totalAmount, totalPrice, dispatch } } />
       </section>
     </main> 
   )

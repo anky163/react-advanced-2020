@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 
 export const useFetch = (url) => {
+  console.count('useFetch called');
+
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
 

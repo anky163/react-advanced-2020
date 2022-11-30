@@ -1,5 +1,7 @@
 import React from 'react'
-// import Setup from './tutorial/8-useContext/setup/1-context-api'
+// import Setup from './tutorial/11-react-router/setup'
+// import Setup from './tutorial/12-memo-useMemo-useCallback/setup'
+
 
 //// PROJECTS
 // import Setup from './projects/useState/birthday-reminder/birthday-reminder'
@@ -19,7 +21,9 @@ import React from 'react'
 
 // import Setup from './projects/useReducer-and-useContext/modal-and-slidebar'
 // import Setup from './projects/useReducer-and-useContext/stripe-menus'
-import Setup from './projects/useReducer-and-useContext/cart'
+// import Setup from './projects/useReducer-and-useContext/cart'
+
+import Setup from './projects/useCallback-useMemo/cocktail/index'
 
 
 

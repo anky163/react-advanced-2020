@@ -1,4 +1,14 @@
-export const getData = async({ url, dispatch, setIsLoading, setIsError, setError }) => {
+import { useState, useEffect, useReducer, useCallback } from 'react'
+import { reducer } from './reducer';
+
+export const useFetch = (url) => {  
+  const [bag, dispatch] = useReducer(reducer, { totalAmount: 0 });
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(true);
+  const [error, setError] = useState('');
+
+  const getData = useCallback(async() => {
     try {
       const response = await fetch(url);
 
@@ -24,4 +34,15 @@ export const getData = async({ url, dispatch, setIsLoading, setIsError, setError
       setIsLoading(false);
       setError(`${err}`);
     }
+  }, [url])
+
+  useEffect(() => {
+    document.title = `Yotsuba's bag (${ bag.totalAmount })`;
+  }, [bag.totalAmount]);
+
+  useEffect(() => {
+    getData(url);
+  }, [url, getData]);
+
+  return { bag, dispatch, isLoading, isError, error };
 }

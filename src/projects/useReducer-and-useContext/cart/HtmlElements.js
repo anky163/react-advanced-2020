@@ -32,38 +32,42 @@ export const Header = ({ totalAmount }) => {
 }
 
 
-export const Item = ({ item, dispatch }) => {
-  const { id, title, price, amount, img } = item;
+export const Item = React.memo(({ ...props }) => {
+    console.count('single item called');
+    const { item, dispatch } = props;
+    const { id, title, price, amount, img } = item;
+    return (
+      <article className='cart-item'>
+        <img src={ img } alt={ title } />
+
+        <AppContext.Provider value={ { id, dispatch } }>
+
+            <div>
+              <h4>{ title }</h4>
+              <h4 className='item-price'>${ price }</h4>
+              <RemoveButton />                   
+            </div>
+
+            <div>
+              <IncreaseButton />
+              <p className="amount">{ amount }</p>
+              <DecreaseButton />  
+            </div>
+
+        </AppContext.Provider>
+      </article>
+    )
+  }
+)
+
+
+export const Footer = ({ ...props }) => {
+  const { totalAmount, totalPrice, dispatch } = props;
   return (
-    <article className='cart-item'>
-      <img src={ img } alt={ title } />
-
-      <AppContext.Provider value={ { id, dispatch } }>
-
-          <div>
-            <h4>{ title }</h4>
-            <h4 className='item-price'>${ price }</h4>
-            <RemoveButton />                   
-          </div>
-
-          <div>
-            <IncreaseButton />
-            <p className="amount">{ amount }</p>
-            <DecreaseButton />  
-          </div>
-
-      </AppContext.Provider>
-    </article>
-  )
-}
-
-
-export const Footer = ({ totalAmount, totalPrice, dispatch }) => {
-  return (
-    <footer>
+    <>
       {
         totalAmount > 0 && (
-          <>
+          <footer>
             <hr />
             <div className="cart-total">
               <h4>total <span>${ totalPrice.toFixed(2) }</span></h4>
@@ -72,9 +76,9 @@ export const Footer = ({ totalAmount, totalPrice, dispatch }) => {
             <AppContext.Provider value={ { dispatch } } >
               <ClearButton />
             </AppContext.Provider>
-          </>
+          </footer>
         )
       }
-    </footer>
+    </>
   )
 }
