@@ -12,11 +12,7 @@ import CocktailsList from './components/CocktailsList'
 
 
 const Home = React.memo(({ drinks, loading, searchTerm, dispatch }) => {
-  console.count('Home rendering')
-
-  if (drinks) {
-    console.log(drinks);
-  }
+  console.count('\n\nHome rendering')
 
   return (
     <main>

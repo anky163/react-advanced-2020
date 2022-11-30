@@ -1,19 +1,15 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { GetSingleCocktailById } from '../GetSingleCocktailById';
+import { GetData } from '../GetData';
 import Loader from './components/Loader'
 
 
 const Detail = React.memo(() => {
-  console.count('Detail rendering');
+  console.count('\n\nDetail rendering')
 
   const { id } = useParams()
-  const { cocktail, loading } = GetSingleCocktailById(id)
-
-  if (!loading) {
-    console.log(cocktail)
-  }
+  const { singleCocktail, loading } = GetData(id)
 
   const {
     name,
@@ -23,7 +19,7 @@ const Detail = React.memo(() => {
     glass,
     instructions,
     ingredients,
-  } = cocktail
+  } = singleCocktail
 
   // console.log(ingredients);
 

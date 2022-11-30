@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 // import { AppContext } from "../../AppContext"
 
 const CocktailsList = React.memo(({ drinks }) => {
-  console.count('List called')
+  // console.count('List called')
 
   return (
     <>

@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 // global
 // import { AppContext } from '../AppContext'
-import { GetDrinksByNames } from '../getDrinksByNames'
+import { GetData } from '../GetData'
 
 // pages
 import Home from '../pages/Home'
@@ -24,7 +24,7 @@ const Index = () => {
         <Navbar />
 
         <Routes >   
-          <Route path="/" element={ <Home { ...GetDrinksByNames() } /> } />
+          <Route path="/" element={ <Home { ...GetData(null) } /> } />
           <Route path="/cocktail/:id" element={ <Detail /> } />
           <Route path="/about" element={ <About /> } />
           <Route path='*' element={ <Error /> } />  
