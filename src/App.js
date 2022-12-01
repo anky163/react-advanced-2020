@@ -23,7 +23,7 @@ import React from 'react'
 // import Setup from './projects/useReducer-and-useContext/stripe-menus'
 // import Setup from './projects/useReducer-and-useContext/cart'
 
-import Setup from './projects/useCallback-useMemo/cocktail/index'
+import Setup from './projects/useCallback-memo/cocktail/index'
 
 
 
