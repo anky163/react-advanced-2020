@@ -1,9 +1,7 @@
-import React from 'react'
-
-// import { useContext } from 'react'
+import React, { useContext } from 'react'
 
 // global
-// import { AppContext } from '../AppContext'
+import { AppContext } from '../AppContext'
 
 // components
 import Form from './components/Form'
@@ -11,17 +9,23 @@ import Loader from './components/Loader'
 import CocktailsList from './components/CocktailsList' 
 
 
-const Home = React.memo(({ drinks, loading, searchTerm, dispatch }) => {
+const Home = React.memo(() => {
   console.count('\n\nHome rendering')
+
+  const { drinks, loading, searchTerm, dispatch } = useContext(AppContext)
 
   return (
     <main>
-      <Form searchTerm={ searchTerm } dispatch={ dispatch } />
+      <AppContext.Provider value={ { searchTerm, dispatch } }>
+        <Form />
+      </AppContext.Provider>
       
       { 
         loading
         ? <Loader /> 
-        : <CocktailsList drinks={ drinks } />
+        : <AppContext.Provider value={ { drinks } }>
+            <CocktailsList />
+          </AppContext.Provider> 
       }
     </main>
   )

@@ -4,7 +4,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 // global
-// import { AppContext } from '../AppContext'
+import { AppContext } from '../AppContext'
 import { GetData } from '../GetData'
 
 // pages
@@ -24,13 +24,22 @@ const Index = () => {
         <Navbar />
 
         <Routes >   
-          <Route path="/" element={ <Home { ...GetData(null) } /> } />
+          <Route path="/" element={ <HomePage { ...GetData() } /> } />
           <Route path="/cocktail/:id" element={ <Detail /> } />
           <Route path="/about" element={ <About /> } />
           <Route path='*' element={ <Error /> } />  
         </Routes>
  
       </Router>
+  )
+}
+
+
+const HomePage = ({ loading, drinks, searchTerm, dispatch }) => {
+  return (
+    <AppContext.Provider value={ { loading, drinks, searchTerm, dispatch } }>
+      <Home />
+    </AppContext.Provider>
   )
 }
 

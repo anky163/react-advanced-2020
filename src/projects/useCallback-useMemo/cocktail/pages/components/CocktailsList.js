@@ -1,10 +1,12 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Link } from 'react-router-dom'
 
-// import { AppContext } from "../../AppContext"
+import { AppContext } from "../../AppContext"
 
-const CocktailsList = React.memo(({ drinks }) => {
+const CocktailsList = React.memo(() => {
   // console.count('List called')
+
+  const { drinks } = useContext(AppContext)
 
   return (
     <>

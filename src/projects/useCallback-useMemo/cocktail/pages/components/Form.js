@@ -1,7 +1,12 @@
-import React from "react"
+import React, { useContext } from "react"
+import { AppContext } from "../../AppContext"
 
 
-const Form = ({ searchTerm, dispatch }) => {
+const Form = () => {
+  // console.count('Form rendering');
+
+  const { searchTerm, dispatch } = useContext(AppContext)
+
   const filterOut = (e) => {
     e.preventDefault();
     dispatch({ type: 'SEARCH', payload: e.target.value })
